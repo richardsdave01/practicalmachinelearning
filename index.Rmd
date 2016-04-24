@@ -9,17 +9,64 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Introduction
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, the goal is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: http://groupware.les.inf.puc-rio.br/har (see the section on the Weight Lifting Exercise Dataset).
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Read and clean data
 
-```{r cars}
-summary(cars)
+First, read the training data
+```{r read1}
+training = read.csv(
+        "C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",
+        stringsAsFactors = FALSE
+        )
+dim(training)
+str(training)
+summary(training)
 ```
 
-## Including Plots
+We see a lot of NAs and "" (empty strings). Also, some fields that we would expect to be numeric contain character data, so we investigate one of them further.
+```{r check_col}
+table(training$kurtosis_roll_dumbbell)
+```
+
+We find 5 "DIV/0!" values (omitting the output due to space limitations), so let's reread the data, changing them to NA.
+```{r read_train}
+training = read.csv(
+        "C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",
+        stringsAsFactors = FALSE,
+        na.strings = c("NA", "", "#DIV/0!")
+        )
+sum(training == '#DIV/0', na.rm = TRUE)
+sum(training == '', na.rm = TRUE)
+```
+
+Create a new dataset with only the columns that are not more than 95% NA.
+```{r train_good}
+keep_train <- apply(training, 2, function(x) mean(is.na(x)) < 0.95)
+train_good <- training[,keep_train]
+head(train_good)
+```
+
+The first seven columns are metadata so let's remove them.
+```{r remove_meta}
+train_good <- train_good[,-(1:7)]
+dim(train_good)
+sum(complete.cases(train_good))
+```
+
+We read and pre-process the testing data the same way.
+```{r read_test}
+testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE,
+                    na.strings=c("NA", "", "#DIV/0!"))
+test_good <- testing[,keep_train]
+test_good <- test_good[,-(1:7)]
+dim(test_good)
+sum(complete.cases(test_good))
+```
+
+## Create and train model
 
 You can also embed plots, for example:
 
