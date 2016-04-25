@@ -6,7 +6,7 @@ output: html_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo=TRUE, tidy=TRUE)
 ```
 
 ## Introduction
@@ -17,27 +17,20 @@ Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible t
 
 First, read the training data
 ```{r read1}
-training = read.csv(
-        "C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",
-        stringsAsFactors = FALSE
-        )
+training = read.csv("C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",stringsAsFactors = FALSE)
 dim(training)
 str(training)
 summary(training)
 ```
 
 We see a lot of NAs and "" (empty strings). Also, some fields that we would expect to be numeric contain character data, so we investigate one of them further.
-```{r check_col}
+```{r check_col, include=FALSE}
 table(training$kurtosis_roll_dumbbell)
 ```
 
 We find 5 "DIV/0!" values (omitting the output due to space limitations), so let's reread the data, changing them to NA.
 ```{r read_train}
-training = read.csv(
-        "C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",
-        stringsAsFactors = FALSE,
-        na.strings = c("NA", "", "#DIV/0!")
-        )
+training = read.csv("C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",stringsAsFactors = FALSE,na.strings = c("NA", "", "#DIV/0!"))
 sum(training == '#DIV/0', na.rm = TRUE)
 sum(training == '', na.rm = TRUE)
 ```
@@ -68,10 +61,52 @@ sum(complete.cases(test_good))
 
 ## Create and train model
 
-You can also embed plots, for example:
+We are going to use the Random Forest model to predict the class for the test cases. Random Forest is very accurate but can take a long time to run. We will improve performance by using parallel processing. **Thanks to Len Greski** for his overviews on setting up parallel processing as well as configuring Git.
 
-```{r pressure, echo=FALSE}
-plot(pressure)
+Set seed for reproducibility.
+```{r seed}
+set.seed(32464)
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+Include caret package and configure parallel processing. Caret automates k-fold cross-validation and estimates out of sample error.
+```{r parallel}
+library(caret)
+library(parallel)
+library(doParallel)
+detectCores()
+cluster <- makeCluster(detectCores() - 1)  # Leave one core for the OS
+registerDoParallel(cluster)
+```
+
+Configure the trainControl object for 10-fold cross-validation.
+```{r trainControl}
+fitControl <- trainControl(method = "cv", number = 10, allowParallel = TRUE)
+```
+
+Develop the training model using random forests.
+```{r model, cache=TRUE}
+x <- train_good[,-53]
+y <- train_good[,53]
+fit <- train(x, y, method="rf", data=train_good, trControl=fitControl)
+```
+
+De-register the parallel processing cluster
+```{r stop_cluster}
+stopCluster(cluster)
+```
+
+We check accuracy (>99%) and confusion matrix of model.
+```{r mod_check}
+fit
+fit$resample
+confusionMatrix.train(fit)
+```
+
+Now we use the model to predict on test data.
+```{r predict}
+x <- test_good[,-53]
+prediction <- predict(fit, x)
+prediction
+```
+
+## Conclusion
