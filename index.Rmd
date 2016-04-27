@@ -22,12 +22,12 @@ dim(training)
 str(training)
 ```
 
-We see a lot of NAs and "" (empty strings). Also, some fields that we would expect to be numeric contain character data, so we investigate one of them further.
+We see a lot of NAs and "" (empty strings). Also, some fields that we would expect to be numeric contain character data, so we investigate one of them further. (I'm omitting the output from this command to save space.)
 ```{r check_col, include=FALSE}
 table(training$kurtosis_roll_dumbbell)
 ```
 
-We find 5 "DIV/0!" values (omitting the output due to space limitations), so let's reread the data, changing them to NA.
+We find 5 "DIV/0!" values, so let's reread the data, changing them as well as empty strings and "NA" strings to NA.
 ```{r read_train}
 training = read.csv("C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",stringsAsFactors = FALSE,na.strings = c("NA", "", "#DIV/0!"))
 sum(training == '#DIV/0', na.rm = TRUE)
@@ -41,7 +41,7 @@ train_good <- training[,keep_train]
 head(train_good)
 ```
 
-The first seven columns are metadata so let's remove them.
+The first seven columns are metadata so let's remove them as well.
 ```{r remove_meta}
 train_good <- train_good[,-(1:7)]
 dim(train_good)
@@ -50,7 +50,11 @@ sum(complete.cases(train_good))
 
 We read and pre-process the testing data the same way.
 ```{r read_test}
+<<<<<<< HEAD
 testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE,na.strings=c("NA", "", "#DIV/0!"))
+=======
+testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE, na.strings=c("NA", "", "#DIV/0!"))
+>>>>>>> f6574a41d4dde8af2215a9ae2ec62c5215db18f0
 test_good <- testing[,keep_train]
 test_good <- test_good[,-(1:7)]
 dim(test_good)
@@ -93,9 +97,15 @@ fitControl <- trainControl(method = "cv", number = 10, allowParallel = TRUE)
 
 Develop the training model using random forests.
 ```{r model, cache=TRUE}
+<<<<<<< HEAD
 x <- trainData[,-53]
 y <- trainData[,53]
 fit <- train(x, y, method="rf", data=trainData, trControl=fitControl)
+=======
+x <- train_good[,-53]
+y <- train_good[,53]
+fit <- train(x, y, method="rf", data=train_good, trControl=fitControl)  # This can take a long time to run.
+>>>>>>> f6574a41d4dde8af2215a9ae2ec62c5215db18f0
 ```
 
 De-register the parallel processing cluster
@@ -128,3 +138,8 @@ prediction
 ```
 
 ## Conclusion
+<<<<<<< HEAD
+=======
+
+The model predicted all 20 of the observations in the testing dataset correctly.
+>>>>>>> f6574a41d4dde8af2215a9ae2ec62c5215db18f0
