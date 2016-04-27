@@ -15,12 +15,11 @@ Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible t
 
 ## Read and clean data
 
-First, read the training data
+First, read the training data, which has already been read from the project website.
 ```{r read1}
 training = read.csv("C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv",stringsAsFactors = FALSE)
 dim(training)
 str(training)
-summary(training)
 ```
 
 We see a lot of NAs and "" (empty strings). Also, some fields that we would expect to be numeric contain character data, so we investigate one of them further.
@@ -51,13 +50,23 @@ sum(complete.cases(train_good))
 
 We read and pre-process the testing data the same way.
 ```{r read_test}
-testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE,
-                    na.strings=c("NA", "", "#DIV/0!"))
+testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE,na.strings=c("NA", "", "#DIV/0!"))
 test_good <- testing[,keep_train]
 test_good <- test_good[,-(1:7)]
 dim(test_good)
 sum(complete.cases(test_good))
 ```
+
+Now, we split the training data into two datasets. We will use valData to estimate out-of-sample error of the model
+```{r split}
+library(caret)
+inTrain <- createDataPartition(y=train_good$classe, p=0.60, list=FALSE)
+trainData <- train_good[inTrain,]
+valData <- train_good[-inTrain,]
+dim(trainData)
+dim(valData)
+```
+
 
 ## Create and train model
 
@@ -68,9 +77,8 @@ Set seed for reproducibility.
 set.seed(32464)
 ```
 
-Include caret package and configure parallel processing. Caret automates k-fold cross-validation and estimates out of sample error.
+Configure parallel processing.
 ```{r parallel}
-library(caret)
 library(parallel)
 library(doParallel)
 detectCores()
@@ -78,16 +86,16 @@ cluster <- makeCluster(detectCores() - 1)  # Leave one core for the OS
 registerDoParallel(cluster)
 ```
 
-Configure the trainControl object for 10-fold cross-validation.
+Configure the trainControl object for 10-fold cross-validation. Caret automates k-fold cross-validation.
 ```{r trainControl}
 fitControl <- trainControl(method = "cv", number = 10, allowParallel = TRUE)
 ```
 
 Develop the training model using random forests.
 ```{r model, cache=TRUE}
-x <- train_good[,-53]
-y <- train_good[,53]
-fit <- train(x, y, method="rf", data=train_good, trControl=fitControl)
+x <- trainData[,-53]
+y <- trainData[,53]
+fit <- train(x, y, method="rf", data=trainData, trControl=fitControl)
 ```
 
 De-register the parallel processing cluster
@@ -95,12 +103,22 @@ De-register the parallel processing cluster
 stopCluster(cluster)
 ```
 
-We check accuracy (>99%) and confusion matrix of model.
+Check accuracy (>99%) and confusion matrix of model.
 ```{r mod_check}
 fit
-fit$resample
 confusionMatrix.train(fit)
 ```
+
+Calculate out-of-sample error for the model.
+```{r oos_error}
+validate <- predict(fit, valData)
+valAccuracy <- sum(valData.classe == validate) / length(validate)
+valAccuracy
+
+outOfSampleError <- 1 - valAccuracy
+outOfSampleError
+```
+
 
 Now we use the model to predict on test data.
 ```{r predict}

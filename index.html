@@ -68,24 +68,696 @@ img {
 </div>
 
 
-<div id="r-markdown" class="section level2">
-<h2>R Markdown</h2>
-<p>This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <a href="http://rmarkdown.rstudio.com" class="uri">http://rmarkdown.rstudio.com</a>.</p>
-<p>When you click the <strong>Knit</strong> button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
-<pre class="r"><code>summary(cars)</code></pre>
-<pre><code>##      speed           dist       
-##  Min.   : 4.0   Min.   :  2.00  
-##  1st Qu.:12.0   1st Qu.: 26.00  
-##  Median :15.0   Median : 36.00  
-##  Mean   :15.4   Mean   : 42.98  
-##  3rd Qu.:19.0   3rd Qu.: 56.00  
-##  Max.   :25.0   Max.   :120.00</code></pre>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement - a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, the goal is to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. More information is available from the website here: <a href="http://groupware.les.inf.puc-rio.br/har" class="uri">http://groupware.les.inf.puc-rio.br/har</a> (see the section on the Weight Lifting Exercise Dataset).</p>
 </div>
-<div id="including-plots" class="section level2">
-<h2>Including Plots</h2>
-<p>You can also embed plots, for example:</p>
-<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAABUAAAAPACAMAAADDuCPrAAAAXVBMVEUAAAAAACsAAFUAKysAK4AAVYAAVaorAAArKwArgKorgNRVAABVqqpVqv+AKwCAVQCAgNSA1NSA1P+qVQCq/6qq///UgCvUqlXU/9TU////qlX/1ID//6r//9T///9FAoT4AAAACXBIWXMAAB2HAAAdhwGP5fFlAAAgAElEQVR4nO3da2PTSICmUdPDwC4s7A7eziwG8v9/5lq+ypcE601FVWWf86UhYLlaiR8kq1RePAMQWdQeAECvBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAIQEFCAkoQEhAAUICChASUICQgAKEBBQgJKAAobYDugAopnyiim+xoNp7G7gvxRtVeoNnloeRf5r+4Hf4BwN4WJ0F9Oms/lMbKqBAOV0F9Nfni+Pnf/6dtAUBBcrpKaB/vp8W8/fX9e8//pyyCQEFyukpoKuLXA5J/TZlEwIKlNNTQJeXJ+zrg9BJb4MKKFBORwFdH25+ufji07RzeAEFyukooOujzcvT9dW0y0gCCpQjoAChjgLq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" title alt width="672" /></p>
-<p>Note that the <code>echo = FALSE</code> parameter was added to the code chunk to prevent printing of the R code that generated the plot.</p>
+<div id="read-and-clean-data" class="section level2">
+<h2>Read and clean data</h2>
+<p>First, read the training data, which has already been read from the project website.</p>
+<pre class="r"><code>training = read.csv(&quot;C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv&quot;, 
+    stringsAsFactors = FALSE)
+dim(training)</code></pre>
+<pre><code>## [1] 19622   160</code></pre>
+<pre class="r"><code>str(training)</code></pre>
+<pre><code>## 'data.frame':    19622 obs. of  160 variables:
+##  $ X                       : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ user_name               : chr  &quot;carlitos&quot; &quot;carlitos&quot; &quot;carlitos&quot; &quot;carlitos&quot; ...
+##  $ raw_timestamp_part_1    : int  1323084231 1323084231 1323084231 1323084232 1323084232 1323084232 1323084232 1323084232 1323084232 1323084232 ...
+##  $ raw_timestamp_part_2    : int  788290 808298 820366 120339 196328 304277 368296 440390 484323 484434 ...
+##  $ cvtd_timestamp          : chr  &quot;05/12/2011 11:23&quot; &quot;05/12/2011 11:23&quot; &quot;05/12/2011 11:23&quot; &quot;05/12/2011 11:23&quot; ...
+##  $ new_window              : chr  &quot;no&quot; &quot;no&quot; &quot;no&quot; &quot;no&quot; ...
+##  $ num_window              : int  11 11 11 12 12 12 12 12 12 12 ...
+##  $ roll_belt               : num  1.41 1.41 1.42 1.48 1.48 1.45 1.42 1.42 1.43 1.45 ...
+##  $ pitch_belt              : num  8.07 8.07 8.07 8.05 8.07 8.06 8.09 8.13 8.16 8.17 ...
+##  $ yaw_belt                : num  -94.4 -94.4 -94.4 -94.4 -94.4 -94.4 -94.4 -94.4 -94.4 -94.4 ...
+##  $ total_accel_belt        : int  3 3 3 3 3 3 3 3 3 3 ...
+##  $ kurtosis_roll_belt      : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ kurtosis_picth_belt     : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ kurtosis_yaw_belt       : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_roll_belt      : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_roll_belt.1    : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_yaw_belt       : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ max_roll_belt           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ max_picth_belt          : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ max_yaw_belt            : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ min_roll_belt           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_pitch_belt          : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_yaw_belt            : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ amplitude_roll_belt     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ amplitude_pitch_belt    : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ amplitude_yaw_belt      : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ var_total_accel_belt    : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ avg_roll_belt           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ stddev_roll_belt        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ var_roll_belt           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ avg_pitch_belt          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ stddev_pitch_belt       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ var_pitch_belt          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ avg_yaw_belt            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ stddev_yaw_belt         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ var_yaw_belt            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ gyros_belt_x            : num  0 0.02 0 0.02 0.02 0.02 0.02 0.02 0.02 0.03 ...
+##  $ gyros_belt_y            : num  0 0 0 0 0.02 0 0 0 0 0 ...
+##  $ gyros_belt_z            : num  -0.02 -0.02 -0.02 -0.03 -0.02 -0.02 -0.02 -0.02 -0.02 0 ...
+##  $ accel_belt_x            : int  -21 -22 -20 -22 -21 -21 -22 -22 -20 -21 ...
+##  $ accel_belt_y            : int  4 4 5 3 2 4 3 4 2 4 ...
+##  $ accel_belt_z            : int  22 22 23 21 24 21 21 21 24 22 ...
+##  $ magnet_belt_x           : int  -3 -7 -2 -6 -6 0 -4 -2 1 -3 ...
+##  $ magnet_belt_y           : int  599 608 600 604 600 603 599 603 602 609 ...
+##  $ magnet_belt_z           : int  -313 -311 -305 -310 -302 -312 -311 -313 -312 -308 ...
+##  $ roll_arm                : num  -128 -128 -128 -128 -128 -128 -128 -128 -128 -128 ...
+##  $ pitch_arm               : num  22.5 22.5 22.5 22.1 22.1 22 21.9 21.8 21.7 21.6 ...
+##  $ yaw_arm                 : num  -161 -161 -161 -161 -161 -161 -161 -161 -161 -161 ...
+##  $ total_accel_arm         : int  34 34 34 34 34 34 34 34 34 34 ...
+##  $ var_accel_arm           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ avg_roll_arm            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ stddev_roll_arm         : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ var_roll_arm            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ avg_pitch_arm           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ stddev_pitch_arm        : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ var_pitch_arm           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ avg_yaw_arm             : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ stddev_yaw_arm          : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ var_yaw_arm             : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ gyros_arm_x             : num  0 0.02 0.02 0.02 0 0.02 0 0.02 0.02 0.02 ...
+##  $ gyros_arm_y             : num  0 -0.02 -0.02 -0.03 -0.03 -0.03 -0.03 -0.02 -0.03 -0.03 ...
+##  $ gyros_arm_z             : num  -0.02 -0.02 -0.02 0.02 0 0 0 0 -0.02 -0.02 ...
+##  $ accel_arm_x             : int  -288 -290 -289 -289 -289 -289 -289 -289 -288 -288 ...
+##  $ accel_arm_y             : int  109 110 110 111 111 111 111 111 109 110 ...
+##  $ accel_arm_z             : int  -123 -125 -126 -123 -123 -122 -125 -124 -122 -124 ...
+##  $ magnet_arm_x            : int  -368 -369 -368 -372 -374 -369 -373 -372 -369 -376 ...
+##  $ magnet_arm_y            : int  337 337 344 344 337 342 336 338 341 334 ...
+##  $ magnet_arm_z            : int  516 513 513 512 506 513 509 510 518 516 ...
+##  $ kurtosis_roll_arm       : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ kurtosis_picth_arm      : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ kurtosis_yaw_arm        : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_roll_arm       : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_pitch_arm      : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_yaw_arm        : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ max_roll_arm            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ max_picth_arm           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ max_yaw_arm             : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_roll_arm            : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_pitch_arm           : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_yaw_arm             : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ amplitude_roll_arm      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ amplitude_pitch_arm     : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ amplitude_yaw_arm       : int  NA NA NA NA NA NA NA NA NA NA ...
+##  $ roll_dumbbell           : num  13.1 13.1 12.9 13.4 13.4 ...
+##  $ pitch_dumbbell          : num  -70.5 -70.6 -70.3 -70.4 -70.4 ...
+##  $ yaw_dumbbell            : num  -84.9 -84.7 -85.1 -84.9 -84.9 ...
+##  $ kurtosis_roll_dumbbell  : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ kurtosis_picth_dumbbell : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ kurtosis_yaw_dumbbell   : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_roll_dumbbell  : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_pitch_dumbbell : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ skewness_yaw_dumbbell   : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ max_roll_dumbbell       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ max_picth_dumbbell      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ max_yaw_dumbbell        : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ min_roll_dumbbell       : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_pitch_dumbbell      : num  NA NA NA NA NA NA NA NA NA NA ...
+##  $ min_yaw_dumbbell        : chr  &quot;&quot; &quot;&quot; &quot;&quot; &quot;&quot; ...
+##  $ amplitude_roll_dumbbell : num  NA NA NA NA NA NA NA NA NA NA ...
+##   [list output truncated]</code></pre>
+<pre class="r"><code>summary(training)</code></pre>
+<pre><code>##        X          user_name         raw_timestamp_part_1
+##  Min.   :    1   Length:19622       Min.   :1.322e+09   
+##  1st Qu.: 4906   Class :character   1st Qu.:1.323e+09   
+##  Median : 9812   Mode  :character   Median :1.323e+09   
+##  Mean   : 9812                      Mean   :1.323e+09   
+##  3rd Qu.:14717                      3rd Qu.:1.323e+09   
+##  Max.   :19622                      Max.   :1.323e+09   
+##                                                         
+##  raw_timestamp_part_2 cvtd_timestamp      new_window       
+##  Min.   :   294       Length:19622       Length:19622      
+##  1st Qu.:252912       Class :character   Class :character  
+##  Median :496380       Mode  :character   Mode  :character  
+##  Mean   :500656                                            
+##  3rd Qu.:751891                                            
+##  Max.   :998801                                            
+##                                                            
+##    num_window      roll_belt        pitch_belt          yaw_belt      
+##  Min.   :  1.0   Min.   :-28.90   Min.   :-55.8000   Min.   :-180.00  
+##  1st Qu.:222.0   1st Qu.:  1.10   1st Qu.:  1.7600   1st Qu.: -88.30  
+##  Median :424.0   Median :113.00   Median :  5.2800   Median : -13.00  
+##  Mean   :430.6   Mean   : 64.41   Mean   :  0.3053   Mean   : -11.21  
+##  3rd Qu.:644.0   3rd Qu.:123.00   3rd Qu.: 14.9000   3rd Qu.:  12.90  
+##  Max.   :864.0   Max.   :162.00   Max.   : 60.3000   Max.   : 179.00  
+##                                                                       
+##  total_accel_belt kurtosis_roll_belt kurtosis_picth_belt
+##  Min.   : 0.00    Length:19622       Length:19622       
+##  1st Qu.: 3.00    Class :character   Class :character   
+##  Median :17.00    Mode  :character   Mode  :character   
+##  Mean   :11.31                                          
+##  3rd Qu.:18.00                                          
+##  Max.   :29.00                                          
+##                                                         
+##  kurtosis_yaw_belt  skewness_roll_belt skewness_roll_belt.1
+##  Length:19622       Length:19622       Length:19622        
+##  Class :character   Class :character   Class :character    
+##  Mode  :character   Mode  :character   Mode  :character    
+##                                                            
+##                                                            
+##                                                            
+##                                                            
+##  skewness_yaw_belt  max_roll_belt     max_picth_belt  max_yaw_belt      
+##  Length:19622       Min.   :-94.300   Min.   : 3.00   Length:19622      
+##  Class :character   1st Qu.:-88.000   1st Qu.: 5.00   Class :character  
+##  Mode  :character   Median : -5.100   Median :18.00   Mode  :character  
+##                     Mean   : -6.667   Mean   :12.92                     
+##                     3rd Qu.: 18.500   3rd Qu.:19.00                     
+##                     Max.   :180.000   Max.   :30.00                     
+##                     NA's   :19216     NA's   :19216                     
+##  min_roll_belt     min_pitch_belt  min_yaw_belt       amplitude_roll_belt
+##  Min.   :-180.00   Min.   : 0.00   Length:19622       Min.   :  0.000    
+##  1st Qu.: -88.40   1st Qu.: 3.00   Class :character   1st Qu.:  0.300    
+##  Median :  -7.85   Median :16.00   Mode  :character   Median :  1.000    
+##  Mean   : -10.44   Mean   :10.76                      Mean   :  3.769    
+##  3rd Qu.:   9.05   3rd Qu.:17.00                      3rd Qu.:  2.083    
+##  Max.   : 173.00   Max.   :23.00                      Max.   :360.000    
+##  NA's   :19216     NA's   :19216                      NA's   :19216      
+##  amplitude_pitch_belt amplitude_yaw_belt var_total_accel_belt
+##  Min.   : 0.000       Length:19622       Min.   : 0.000      
+##  1st Qu.: 1.000       Class :character   1st Qu.: 0.100      
+##  Median : 1.000       Mode  :character   Median : 0.200      
+##  Mean   : 2.167                          Mean   : 0.926      
+##  3rd Qu.: 2.000                          3rd Qu.: 0.300      
+##  Max.   :12.000                          Max.   :16.500      
+##  NA's   :19216                           NA's   :19216       
+##  avg_roll_belt    stddev_roll_belt var_roll_belt     avg_pitch_belt   
+##  Min.   :-27.40   Min.   : 0.000   Min.   :  0.000   Min.   :-51.400  
+##  1st Qu.:  1.10   1st Qu.: 0.200   1st Qu.:  0.000   1st Qu.:  2.025  
+##  Median :116.35   Median : 0.400   Median :  0.100   Median :  5.200  
+##  Mean   : 68.06   Mean   : 1.337   Mean   :  7.699   Mean   :  0.520  
+##  3rd Qu.:123.38   3rd Qu.: 0.700   3rd Qu.:  0.500   3rd Qu.: 15.775  
+##  Max.   :157.40   Max.   :14.200   Max.   :200.700   Max.   : 59.700  
+##  NA's   :19216    NA's   :19216    NA's   :19216     NA's   :19216    
+##  stddev_pitch_belt var_pitch_belt    avg_yaw_belt      stddev_yaw_belt  
+##  Min.   :0.000     Min.   : 0.000   Min.   :-138.300   Min.   :  0.000  
+##  1st Qu.:0.200     1st Qu.: 0.000   1st Qu.: -88.175   1st Qu.:  0.100  
+##  Median :0.400     Median : 0.100   Median :  -6.550   Median :  0.300  
+##  Mean   :0.603     Mean   : 0.766   Mean   :  -8.831   Mean   :  1.341  
+##  3rd Qu.:0.700     3rd Qu.: 0.500   3rd Qu.:  14.125   3rd Qu.:  0.700  
+##  Max.   :4.000     Max.   :16.200   Max.   : 173.500   Max.   :176.600  
+##  NA's   :19216     NA's   :19216    NA's   :19216      NA's   :19216    
+##   var_yaw_belt        gyros_belt_x        gyros_belt_y     
+##  Min.   :    0.000   Min.   :-1.040000   Min.   :-0.64000  
+##  1st Qu.:    0.010   1st Qu.:-0.030000   1st Qu.: 0.00000  
+##  Median :    0.090   Median : 0.030000   Median : 0.02000  
+##  Mean   :  107.487   Mean   :-0.005592   Mean   : 0.03959  
+##  3rd Qu.:    0.475   3rd Qu.: 0.110000   3rd Qu.: 0.11000  
+##  Max.   :31183.240   Max.   : 2.220000   Max.   : 0.64000  
+##  NA's   :19216                                             
+##   gyros_belt_z      accel_belt_x       accel_belt_y     accel_belt_z    
+##  Min.   :-1.4600   Min.   :-120.000   Min.   :-69.00   Min.   :-275.00  
+##  1st Qu.:-0.2000   1st Qu.: -21.000   1st Qu.:  3.00   1st Qu.:-162.00  
+##  Median :-0.1000   Median : -15.000   Median : 35.00   Median :-152.00  
+##  Mean   :-0.1305   Mean   :  -5.595   Mean   : 30.15   Mean   : -72.59  
+##  3rd Qu.:-0.0200   3rd Qu.:  -5.000   3rd Qu.: 61.00   3rd Qu.:  27.00  
+##  Max.   : 1.6200   Max.   :  85.000   Max.   :164.00   Max.   : 105.00  
+##                                                                         
+##  magnet_belt_x   magnet_belt_y   magnet_belt_z       roll_arm      
+##  Min.   :-52.0   Min.   :354.0   Min.   :-623.0   Min.   :-180.00  
+##  1st Qu.:  9.0   1st Qu.:581.0   1st Qu.:-375.0   1st Qu.: -31.77  
+##  Median : 35.0   Median :601.0   Median :-320.0   Median :   0.00  
+##  Mean   : 55.6   Mean   :593.7   Mean   :-345.5   Mean   :  17.83  
+##  3rd Qu.: 59.0   3rd Qu.:610.0   3rd Qu.:-306.0   3rd Qu.:  77.30  
+##  Max.   :485.0   Max.   :673.0   Max.   : 293.0   Max.   : 180.00  
+##                                                                    
+##    pitch_arm          yaw_arm          total_accel_arm var_accel_arm   
+##  Min.   :-88.800   Min.   :-180.0000   Min.   : 1.00   Min.   :  0.00  
+##  1st Qu.:-25.900   1st Qu.: -43.1000   1st Qu.:17.00   1st Qu.:  9.03  
+##  Median :  0.000   Median :   0.0000   Median :27.00   Median : 40.61  
+##  Mean   : -4.612   Mean   :  -0.6188   Mean   :25.51   Mean   : 53.23  
+##  3rd Qu.: 11.200   3rd Qu.:  45.8750   3rd Qu.:33.00   3rd Qu.: 75.62  
+##  Max.   : 88.500   Max.   : 180.0000   Max.   :66.00   Max.   :331.70  
+##                                                        NA's   :19216   
+##   avg_roll_arm     stddev_roll_arm    var_roll_arm       avg_pitch_arm    
+##  Min.   :-166.67   Min.   :  0.000   Min.   :    0.000   Min.   :-81.773  
+##  1st Qu.: -38.37   1st Qu.:  1.376   1st Qu.:    1.898   1st Qu.:-22.770  
+##  Median :   0.00   Median :  5.702   Median :   32.517   Median :  0.000  
+##  Mean   :  12.68   Mean   : 11.201   Mean   :  417.264   Mean   : -4.901  
+##  3rd Qu.:  76.33   3rd Qu.: 14.921   3rd Qu.:  222.647   3rd Qu.:  8.277  
+##  Max.   : 163.33   Max.   :161.964   Max.   :26232.208   Max.   : 75.659  
+##  NA's   :19216     NA's   :19216     NA's   :19216       NA's   :19216    
+##  stddev_pitch_arm var_pitch_arm       avg_yaw_arm       stddev_yaw_arm   
+##  Min.   : 0.000   Min.   :   0.000   Min.   :-173.440   Min.   :  0.000  
+##  1st Qu.: 1.642   1st Qu.:   2.697   1st Qu.: -29.198   1st Qu.:  2.577  
+##  Median : 8.133   Median :  66.146   Median :   0.000   Median : 16.682  
+##  Mean   :10.383   Mean   : 195.864   Mean   :   2.359   Mean   : 22.270  
+##  3rd Qu.:16.327   3rd Qu.: 266.576   3rd Qu.:  38.185   3rd Qu.: 35.984  
+##  Max.   :43.412   Max.   :1884.565   Max.   : 152.000   Max.   :177.044  
+##  NA's   :19216    NA's   :19216      NA's   :19216      NA's   :19216    
+##   var_yaw_arm         gyros_arm_x        gyros_arm_y     
+##  Min.   :    0.000   Min.   :-6.37000   Min.   :-3.4400  
+##  1st Qu.:    6.642   1st Qu.:-1.33000   1st Qu.:-0.8000  
+##  Median :  278.309   Median : 0.08000   Median :-0.2400  
+##  Mean   : 1055.933   Mean   : 0.04277   Mean   :-0.2571  
+##  3rd Qu.: 1294.850   3rd Qu.: 1.57000   3rd Qu.: 0.1400  
+##  Max.   :31344.568   Max.   : 4.87000   Max.   : 2.8400  
+##  NA's   :19216                                           
+##   gyros_arm_z       accel_arm_x       accel_arm_y      accel_arm_z     
+##  Min.   :-2.3300   Min.   :-404.00   Min.   :-318.0   Min.   :-636.00  
+##  1st Qu.:-0.0700   1st Qu.:-242.00   1st Qu.: -54.0   1st Qu.:-143.00  
+##  Median : 0.2300   Median : -44.00   Median :  14.0   Median : -47.00  
+##  Mean   : 0.2695   Mean   : -60.24   Mean   :  32.6   Mean   : -71.25  
+##  3rd Qu.: 0.7200   3rd Qu.:  84.00   3rd Qu.: 139.0   3rd Qu.:  23.00  
+##  Max.   : 3.0200   Max.   : 437.00   Max.   : 308.0   Max.   : 292.00  
+##                                                                        
+##   magnet_arm_x     magnet_arm_y     magnet_arm_z    kurtosis_roll_arm 
+##  Min.   :-584.0   Min.   :-392.0   Min.   :-597.0   Length:19622      
+##  1st Qu.:-300.0   1st Qu.:  -9.0   1st Qu.: 131.2   Class :character  
+##  Median : 289.0   Median : 202.0   Median : 444.0   Mode  :character  
+##  Mean   : 191.7   Mean   : 156.6   Mean   : 306.5                     
+##  3rd Qu.: 637.0   3rd Qu.: 323.0   3rd Qu.: 545.0                     
+##  Max.   : 782.0   Max.   : 583.0   Max.   : 694.0                     
+##                                                                       
+##  kurtosis_picth_arm kurtosis_yaw_arm   skewness_roll_arm 
+##  Length:19622       Length:19622       Length:19622      
+##  Class :character   Class :character   Class :character  
+##  Mode  :character   Mode  :character   Mode  :character  
+##                                                          
+##                                                          
+##                                                          
+##                                                          
+##  skewness_pitch_arm skewness_yaw_arm    max_roll_arm    
+##  Length:19622       Length:19622       Min.   :-73.100  
+##  Class :character   Class :character   1st Qu.: -0.175  
+##  Mode  :character   Mode  :character   Median :  4.950  
+##                                        Mean   : 11.236  
+##                                        3rd Qu.: 26.775  
+##                                        Max.   : 85.500  
+##                                        NA's   :19216    
+##  max_picth_arm       max_yaw_arm     min_roll_arm    min_pitch_arm    
+##  Min.   :-173.000   Min.   : 4.00   Min.   :-89.10   Min.   :-180.00  
+##  1st Qu.:  -1.975   1st Qu.:29.00   1st Qu.:-41.98   1st Qu.: -72.62  
+##  Median :  23.250   Median :34.00   Median :-22.45   Median : -33.85  
+##  Mean   :  35.751   Mean   :35.46   Mean   :-21.22   Mean   : -33.92  
+##  3rd Qu.:  95.975   3rd Qu.:41.00   3rd Qu.:  0.00   3rd Qu.:   0.00  
+##  Max.   : 180.000   Max.   :65.00   Max.   : 66.40   Max.   : 152.00  
+##  NA's   :19216      NA's   :19216   NA's   :19216    NA's   :19216    
+##   min_yaw_arm    amplitude_roll_arm amplitude_pitch_arm amplitude_yaw_arm
+##  Min.   : 1.00   Min.   :  0.000    Min.   :  0.000     Min.   : 0.00    
+##  1st Qu.: 8.00   1st Qu.:  5.425    1st Qu.:  9.925     1st Qu.:13.00    
+##  Median :13.00   Median : 28.450    Median : 54.900     Median :22.00    
+##  Mean   :14.66   Mean   : 32.452    Mean   : 69.677     Mean   :20.79    
+##  3rd Qu.:19.00   3rd Qu.: 50.960    3rd Qu.:115.175     3rd Qu.:28.75    
+##  Max.   :38.00   Max.   :119.500    Max.   :360.000     Max.   :52.00    
+##  NA's   :19216   NA's   :19216      NA's   :19216       NA's   :19216    
+##  roll_dumbbell     pitch_dumbbell     yaw_dumbbell     
+##  Min.   :-153.71   Min.   :-149.59   Min.   :-150.871  
+##  1st Qu.: -18.49   1st Qu.: -40.89   1st Qu.: -77.644  
+##  Median :  48.17   Median : -20.96   Median :  -3.324  
+##  Mean   :  23.84   Mean   : -10.78   Mean   :   1.674  
+##  3rd Qu.:  67.61   3rd Qu.:  17.50   3rd Qu.:  79.643  
+##  Max.   : 153.55   Max.   : 149.40   Max.   : 154.952  
+##                                                        
+##  kurtosis_roll_dumbbell kurtosis_picth_dumbbell kurtosis_yaw_dumbbell
+##  Length:19622           Length:19622            Length:19622         
+##  Class :character       Class :character        Class :character     
+##  Mode  :character       Mode  :character        Mode  :character     
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##  skewness_roll_dumbbell skewness_pitch_dumbbell skewness_yaw_dumbbell
+##  Length:19622           Length:19622            Length:19622         
+##  Class :character       Class :character        Class :character     
+##  Mode  :character       Mode  :character        Mode  :character     
+##                                                                      
+##                                                                      
+##                                                                      
+##                                                                      
+##  max_roll_dumbbell max_picth_dumbbell max_yaw_dumbbell   min_roll_dumbbell
+##  Min.   :-70.10    Min.   :-112.90    Length:19622       Min.   :-149.60  
+##  1st Qu.:-27.15    1st Qu.: -66.70    Class :character   1st Qu.: -59.67  
+##  Median : 14.85    Median :  40.05    Mode  :character   Median : -43.55  
+##  Mean   : 13.76    Mean   :  32.75                       Mean   : -41.24  
+##  3rd Qu.: 50.58    3rd Qu.: 133.22                       3rd Qu.: -25.20  
+##  Max.   :137.00    Max.   : 155.00                       Max.   :  73.20  
+##  NA's   :19216     NA's   :19216                         NA's   :19216    
+##  min_pitch_dumbbell min_yaw_dumbbell   amplitude_roll_dumbbell
+##  Min.   :-147.00    Length:19622       Min.   :  0.00         
+##  1st Qu.: -91.80    Class :character   1st Qu.: 14.97         
+##  Median : -66.15    Mode  :character   Median : 35.05         
+##  Mean   : -33.18                       Mean   : 55.00         
+##  3rd Qu.:  21.20                       3rd Qu.: 81.04         
+##  Max.   : 120.90                       Max.   :256.48         
+##  NA's   :19216                         NA's   :19216          
+##  amplitude_pitch_dumbbell amplitude_yaw_dumbbell total_accel_dumbbell
+##  Min.   :  0.00           Length:19622           Min.   : 0.00       
+##  1st Qu.: 17.06           Class :character       1st Qu.: 4.00       
+##  Median : 41.73           Mode  :character       Median :10.00       
+##  Mean   : 65.93                                  Mean   :13.72       
+##  3rd Qu.: 99.55                                  3rd Qu.:19.00       
+##  Max.   :273.59                                  Max.   :58.00       
+##  NA's   :19216                                                       
+##  var_accel_dumbbell avg_roll_dumbbell stddev_roll_dumbbell
+##  Min.   :  0.000    Min.   :-128.96   Min.   :  0.000     
+##  1st Qu.:  0.378    1st Qu.: -12.33   1st Qu.:  4.639     
+##  Median :  1.000    Median :  48.23   Median : 12.204     
+##  Mean   :  4.388    Mean   :  23.86   Mean   : 20.761     
+##  3rd Qu.:  3.434    3rd Qu.:  64.37   3rd Qu.: 26.356     
+##  Max.   :230.428    Max.   : 125.99   Max.   :123.778     
+##  NA's   :19216      NA's   :19216     NA's   :19216       
+##  var_roll_dumbbell  avg_pitch_dumbbell stddev_pitch_dumbbell
+##  Min.   :    0.00   Min.   :-70.73     Min.   : 0.000       
+##  1st Qu.:   21.52   1st Qu.:-42.00     1st Qu.: 3.482       
+##  Median :  148.95   Median :-19.91     Median : 8.089       
+##  Mean   : 1020.27   Mean   :-12.33     Mean   :13.147       
+##  3rd Qu.:  694.65   3rd Qu.: 13.21     3rd Qu.:19.238       
+##  Max.   :15321.01   Max.   : 94.28     Max.   :82.680       
+##  NA's   :19216      NA's   :19216      NA's   :19216        
+##  var_pitch_dumbbell avg_yaw_dumbbell   stddev_yaw_dumbbell
+##  Min.   :   0.00    Min.   :-117.950   Min.   :  0.000    
+##  1st Qu.:  12.12    1st Qu.: -76.696   1st Qu.:  3.885    
+##  Median :  65.44    Median :  -4.505   Median : 10.264    
+##  Mean   : 350.31    Mean   :   0.202   Mean   : 16.647    
+##  3rd Qu.: 370.11    3rd Qu.:  71.234   3rd Qu.: 24.674    
+##  Max.   :6836.02    Max.   : 134.905   Max.   :107.088    
+##  NA's   :19216      NA's   :19216      NA's   :19216      
+##  var_yaw_dumbbell   gyros_dumbbell_x    gyros_dumbbell_y  
+##  Min.   :    0.00   Min.   :-204.0000   Min.   :-2.10000  
+##  1st Qu.:   15.09   1st Qu.:  -0.0300   1st Qu.:-0.14000  
+##  Median :  105.35   Median :   0.1300   Median : 0.03000  
+##  Mean   :  589.84   Mean   :   0.1611   Mean   : 0.04606  
+##  3rd Qu.:  608.79   3rd Qu.:   0.3500   3rd Qu.: 0.21000  
+##  Max.   :11467.91   Max.   :   2.2200   Max.   :52.00000  
+##  NA's   :19216                                            
+##  gyros_dumbbell_z  accel_dumbbell_x  accel_dumbbell_y  accel_dumbbell_z 
+##  Min.   : -2.380   Min.   :-419.00   Min.   :-189.00   Min.   :-334.00  
+##  1st Qu.: -0.310   1st Qu.: -50.00   1st Qu.:  -8.00   1st Qu.:-142.00  
+##  Median : -0.130   Median :  -8.00   Median :  41.50   Median :  -1.00  
+##  Mean   : -0.129   Mean   : -28.62   Mean   :  52.63   Mean   : -38.32  
+##  3rd Qu.:  0.030   3rd Qu.:  11.00   3rd Qu.: 111.00   3rd Qu.:  38.00  
+##  Max.   :317.000   Max.   : 235.00   Max.   : 315.00   Max.   : 318.00  
+##                                                                         
+##  magnet_dumbbell_x magnet_dumbbell_y magnet_dumbbell_z  roll_forearm      
+##  Min.   :-643.0    Min.   :-3600     Min.   :-262.00   Min.   :-180.0000  
+##  1st Qu.:-535.0    1st Qu.:  231     1st Qu.: -45.00   1st Qu.:  -0.7375  
+##  Median :-479.0    Median :  311     Median :  13.00   Median :  21.7000  
+##  Mean   :-328.5    Mean   :  221     Mean   :  46.05   Mean   :  33.8265  
+##  3rd Qu.:-304.0    3rd Qu.:  390     3rd Qu.:  95.00   3rd Qu.: 140.0000  
+##  Max.   : 592.0    Max.   :  633     Max.   : 452.00   Max.   : 180.0000  
+##                                                                           
+##  pitch_forearm     yaw_forearm      kurtosis_roll_forearm
+##  Min.   :-72.50   Min.   :-180.00   Length:19622         
+##  1st Qu.:  0.00   1st Qu.: -68.60   Class :character     
+##  Median :  9.24   Median :   0.00   Mode  :character     
+##  Mean   : 10.71   Mean   :  19.21                        
+##  3rd Qu.: 28.40   3rd Qu.: 110.00                        
+##  Max.   : 89.80   Max.   : 180.00                        
+##                                                          
+##  kurtosis_picth_forearm kurtosis_yaw_forearm skewness_roll_forearm
+##  Length:19622           Length:19622         Length:19622         
+##  Class :character       Class :character     Class :character     
+##  Mode  :character       Mode  :character     Mode  :character     
+##                                                                   
+##                                                                   
+##                                                                   
+##                                                                   
+##  skewness_pitch_forearm skewness_yaw_forearm max_roll_forearm
+##  Length:19622           Length:19622         Min.   :-66.60  
+##  Class :character       Class :character     1st Qu.:  0.00  
+##  Mode  :character       Mode  :character     Median : 26.80  
+##                                              Mean   : 24.49  
+##                                              3rd Qu.: 45.95  
+##                                              Max.   : 89.80  
+##                                              NA's   :19216   
+##  max_picth_forearm max_yaw_forearm    min_roll_forearm  min_pitch_forearm
+##  Min.   :-151.00   Length:19622       Min.   :-72.500   Min.   :-180.00  
+##  1st Qu.:   0.00   Class :character   1st Qu.: -6.075   1st Qu.:-175.00  
+##  Median : 113.00   Mode  :character   Median :  0.000   Median : -61.00  
+##  Mean   :  81.49                      Mean   : -0.167   Mean   : -57.57  
+##  3rd Qu.: 174.75                      3rd Qu.: 12.075   3rd Qu.:   0.00  
+##  Max.   : 180.00                      Max.   : 62.100   Max.   : 167.00  
+##  NA's   :19216                        NA's   :19216     NA's   :19216    
+##  min_yaw_forearm    amplitude_roll_forearm amplitude_pitch_forearm
+##  Length:19622       Min.   :  0.000        Min.   :  0.0          
+##  Class :character   1st Qu.:  1.125        1st Qu.:  2.0          
+##  Mode  :character   Median : 17.770        Median : 83.7          
+##                     Mean   : 24.653        Mean   :139.1          
+##                     3rd Qu.: 39.875        3rd Qu.:350.0          
+##                     Max.   :126.000        Max.   :360.0          
+##                     NA's   :19216          NA's   :19216          
+##  amplitude_yaw_forearm total_accel_forearm var_accel_forearm
+##  Length:19622          Min.   :  0.00      Min.   :  0.000  
+##  Class :character      1st Qu.: 29.00      1st Qu.:  6.759  
+##  Mode  :character      Median : 36.00      Median : 21.165  
+##                        Mean   : 34.72      Mean   : 33.502  
+##                        3rd Qu.: 41.00      3rd Qu.: 51.240  
+##                        Max.   :108.00      Max.   :172.606  
+##                                            NA's   :19216    
+##  avg_roll_forearm   stddev_roll_forearm var_roll_forearm  
+##  Min.   :-177.234   Min.   :  0.000     Min.   :    0.00  
+##  1st Qu.:  -0.909   1st Qu.:  0.428     1st Qu.:    0.18  
+##  Median :  11.172   Median :  8.030     Median :   64.48  
+##  Mean   :  33.165   Mean   : 41.986     Mean   : 5274.10  
+##  3rd Qu.: 107.132   3rd Qu.: 85.373     3rd Qu.: 7289.08  
+##  Max.   : 177.256   Max.   :179.171     Max.   :32102.24  
+##  NA's   :19216      NA's   :19216       NA's   :19216     
+##  avg_pitch_forearm stddev_pitch_forearm var_pitch_forearm 
+##  Min.   :-68.17    Min.   : 0.000       Min.   :   0.000  
+##  1st Qu.:  0.00    1st Qu.: 0.336       1st Qu.:   0.113  
+##  Median : 12.02    Median : 5.516       Median :  30.425  
+##  Mean   : 11.79    Mean   : 7.977       Mean   : 139.593  
+##  3rd Qu.: 28.48    3rd Qu.:12.866       3rd Qu.: 165.532  
+##  Max.   : 72.09    Max.   :47.745       Max.   :2279.617  
+##  NA's   :19216     NA's   :19216        NA's   :19216     
+##  avg_yaw_forearm   stddev_yaw_forearm var_yaw_forearm    gyros_forearm_x  
+##  Min.   :-155.06   Min.   :  0.000    Min.   :    0.00   Min.   :-22.000  
+##  1st Qu.: -26.26   1st Qu.:  0.524    1st Qu.:    0.27   1st Qu.: -0.220  
+##  Median :   0.00   Median : 24.743    Median :  612.21   Median :  0.050  
+##  Mean   :  18.00   Mean   : 44.854    Mean   : 4639.85   Mean   :  0.158  
+##  3rd Qu.:  85.79   3rd Qu.: 85.817    3rd Qu.: 7368.41   3rd Qu.:  0.560  
+##  Max.   : 169.24   Max.   :197.508    Max.   :39009.33   Max.   :  3.970  
+##  NA's   :19216     NA's   :19216      NA's   :19216                       
+##  gyros_forearm_y     gyros_forearm_z    accel_forearm_x   accel_forearm_y 
+##  Min.   : -7.02000   Min.   : -8.0900   Min.   :-498.00   Min.   :-632.0  
+##  1st Qu.: -1.46000   1st Qu.: -0.1800   1st Qu.:-178.00   1st Qu.:  57.0  
+##  Median :  0.03000   Median :  0.0800   Median : -57.00   Median : 201.0  
+##  Mean   :  0.07517   Mean   :  0.1512   Mean   : -61.65   Mean   : 163.7  
+##  3rd Qu.:  1.62000   3rd Qu.:  0.4900   3rd Qu.:  76.00   3rd Qu.: 312.0  
+##  Max.   :311.00000   Max.   :231.0000   Max.   : 477.00   Max.   : 923.0  
+##                                                                           
+##  accel_forearm_z   magnet_forearm_x  magnet_forearm_y magnet_forearm_z
+##  Min.   :-446.00   Min.   :-1280.0   Min.   :-896.0   Min.   :-973.0  
+##  1st Qu.:-182.00   1st Qu.: -616.0   1st Qu.:   2.0   1st Qu.: 191.0  
+##  Median : -39.00   Median : -378.0   Median : 591.0   Median : 511.0  
+##  Mean   : -55.29   Mean   : -312.6   Mean   : 380.1   Mean   : 393.6  
+##  3rd Qu.:  26.00   3rd Qu.:  -73.0   3rd Qu.: 737.0   3rd Qu.: 653.0  
+##  Max.   : 291.00   Max.   :  672.0   Max.   :1480.0   Max.   :1090.0  
+##                                                                       
+##     classe         
+##  Length:19622      
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+##                    
+## </code></pre>
+<p>We see a lot of NAs and “” (empty strings). Also, some fields that we would expect to be numeric contain character data, so we investigate one of them further.</p>
+<p>We find 5 “DIV/0!” values (omitting the output due to space limitations), so let’s reread the data, changing them to NA.</p>
+<pre class="r"><code>training = read.csv(&quot;C:/Users/Dave/Documents/R/MachineLearning/pml_project/data/pml-training.csv&quot;, 
+    stringsAsFactors = FALSE, na.strings = c(&quot;NA&quot;, &quot;&quot;, &quot;#DIV/0!&quot;))
+sum(training == &quot;#DIV/0&quot;, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<pre class="r"><code>sum(training == &quot;&quot;, na.rm = TRUE)</code></pre>
+<pre><code>## [1] 0</code></pre>
+<p>Create a new dataset with only the columns that are not more than 95% NA.</p>
+<pre class="r"><code>keep_train &lt;- apply(training, 2, function(x) mean(is.na(x)) &lt; 0.95)
+train_good &lt;- training[, keep_train]
+head(train_good)</code></pre>
+<pre><code>##   X user_name raw_timestamp_part_1 raw_timestamp_part_2   cvtd_timestamp
+## 1 1  carlitos           1323084231               788290 05/12/2011 11:23
+## 2 2  carlitos           1323084231               808298 05/12/2011 11:23
+## 3 3  carlitos           1323084231               820366 05/12/2011 11:23
+## 4 4  carlitos           1323084232               120339 05/12/2011 11:23
+## 5 5  carlitos           1323084232               196328 05/12/2011 11:23
+## 6 6  carlitos           1323084232               304277 05/12/2011 11:23
+##   new_window num_window roll_belt pitch_belt yaw_belt total_accel_belt
+## 1         no         11      1.41       8.07    -94.4                3
+## 2         no         11      1.41       8.07    -94.4                3
+## 3         no         11      1.42       8.07    -94.4                3
+## 4         no         12      1.48       8.05    -94.4                3
+## 5         no         12      1.48       8.07    -94.4                3
+## 6         no         12      1.45       8.06    -94.4                3
+##   gyros_belt_x gyros_belt_y gyros_belt_z accel_belt_x accel_belt_y
+## 1         0.00         0.00        -0.02          -21            4
+## 2         0.02         0.00        -0.02          -22            4
+## 3         0.00         0.00        -0.02          -20            5
+## 4         0.02         0.00        -0.03          -22            3
+## 5         0.02         0.02        -0.02          -21            2
+## 6         0.02         0.00        -0.02          -21            4
+##   accel_belt_z magnet_belt_x magnet_belt_y magnet_belt_z roll_arm
+## 1           22            -3           599          -313     -128
+## 2           22            -7           608          -311     -128
+## 3           23            -2           600          -305     -128
+## 4           21            -6           604          -310     -128
+## 5           24            -6           600          -302     -128
+## 6           21             0           603          -312     -128
+##   pitch_arm yaw_arm total_accel_arm gyros_arm_x gyros_arm_y gyros_arm_z
+## 1      22.5    -161              34        0.00        0.00       -0.02
+## 2      22.5    -161              34        0.02       -0.02       -0.02
+## 3      22.5    -161              34        0.02       -0.02       -0.02
+## 4      22.1    -161              34        0.02       -0.03        0.02
+## 5      22.1    -161              34        0.00       -0.03        0.00
+## 6      22.0    -161              34        0.02       -0.03        0.00
+##   accel_arm_x accel_arm_y accel_arm_z magnet_arm_x magnet_arm_y
+## 1        -288         109        -123         -368          337
+## 2        -290         110        -125         -369          337
+## 3        -289         110        -126         -368          344
+## 4        -289         111        -123         -372          344
+## 5        -289         111        -123         -374          337
+## 6        -289         111        -122         -369          342
+##   magnet_arm_z roll_dumbbell pitch_dumbbell yaw_dumbbell
+## 1          516      13.05217      -70.49400    -84.87394
+## 2          513      13.13074      -70.63751    -84.71065
+## 3          513      12.85075      -70.27812    -85.14078
+## 4          512      13.43120      -70.39379    -84.87363
+## 5          506      13.37872      -70.42856    -84.85306
+## 6          513      13.38246      -70.81759    -84.46500
+##   total_accel_dumbbell gyros_dumbbell_x gyros_dumbbell_y gyros_dumbbell_z
+## 1                   37                0            -0.02             0.00
+## 2                   37                0            -0.02             0.00
+## 3                   37                0            -0.02             0.00
+## 4                   37                0            -0.02            -0.02
+## 5                   37                0            -0.02             0.00
+## 6                   37                0            -0.02             0.00
+##   accel_dumbbell_x accel_dumbbell_y accel_dumbbell_z magnet_dumbbell_x
+## 1             -234               47             -271              -559
+## 2             -233               47             -269              -555
+## 3             -232               46             -270              -561
+## 4             -232               48             -269              -552
+## 5             -233               48             -270              -554
+## 6             -234               48             -269              -558
+##   magnet_dumbbell_y magnet_dumbbell_z roll_forearm pitch_forearm
+## 1               293               -65         28.4         -63.9
+## 2               296               -64         28.3         -63.9
+## 3               298               -63         28.3         -63.9
+## 4               303               -60         28.1         -63.9
+## 5               292               -68         28.0         -63.9
+## 6               294               -66         27.9         -63.9
+##   yaw_forearm total_accel_forearm gyros_forearm_x gyros_forearm_y
+## 1        -153                  36            0.03            0.00
+## 2        -153                  36            0.02            0.00
+## 3        -152                  36            0.03           -0.02
+## 4        -152                  36            0.02           -0.02
+## 5        -152                  36            0.02            0.00
+## 6        -152                  36            0.02           -0.02
+##   gyros_forearm_z accel_forearm_x accel_forearm_y accel_forearm_z
+## 1           -0.02             192             203            -215
+## 2           -0.02             192             203            -216
+## 3            0.00             196             204            -213
+## 4            0.00             189             206            -214
+## 5           -0.02             189             206            -214
+## 6           -0.03             193             203            -215
+##   magnet_forearm_x magnet_forearm_y magnet_forearm_z classe
+## 1              -17              654              476      A
+## 2              -18              661              473      A
+## 3              -18              658              469      A
+## 4              -16              658              469      A
+## 5              -17              655              473      A
+## 6               -9              660              478      A</code></pre>
+<p>The first seven columns are metadata so let’s remove them.</p>
+<pre class="r"><code>train_good &lt;- train_good[, -(1:7)]
+dim(train_good)</code></pre>
+<pre><code>## [1] 19622    53</code></pre>
+<pre class="r"><code>sum(complete.cases(train_good))</code></pre>
+<pre><code>## [1] 19622</code></pre>
+<p>We read and pre-process the testing data the same way.</p>
+<pre class="r"><code>testing = read.csv(&quot;~/R/MachineLearning/pml_project/data/pml-testing.csv&quot;, stringsAsFactors = FALSE, 
+    na.strings = c(&quot;NA&quot;, &quot;&quot;, &quot;#DIV/0!&quot;))
+test_good &lt;- testing[, keep_train]
+test_good &lt;- test_good[, -(1:7)]
+dim(test_good)</code></pre>
+<pre><code>## [1] 20 53</code></pre>
+<pre class="r"><code>sum(complete.cases(test_good))</code></pre>
+<pre><code>## [1] 20</code></pre>
+</div>
+<div id="create-and-train-model" class="section level2">
+<h2>Create and train model</h2>
+<p>We are going to use the Random Forest model to predict the class for the test cases. Random Forest is very accurate but can take a long time to run. We will improve performance by using parallel processing. <strong>Thanks to Len Greski</strong> for his overviews on setting up parallel processing as well as configuring Git.</p>
+<p>Set seed for reproducibility.</p>
+<pre class="r"><code>set.seed(32464)</code></pre>
+<p>Include caret package and configure parallel processing. Caret automates k-fold cross-validation and estimates out of sample error.</p>
+<pre class="r"><code>library(caret)</code></pre>
+<pre><code>## Loading required package: lattice</code></pre>
+<pre><code>## Loading required package: ggplot2</code></pre>
+<pre class="r"><code>library(parallel)
+library(doParallel)</code></pre>
+<pre><code>## Loading required package: foreach</code></pre>
+<pre><code>## Loading required package: iterators</code></pre>
+<pre class="r"><code>detectCores()</code></pre>
+<pre><code>## [1] 2</code></pre>
+<pre class="r"><code>cluster &lt;- makeCluster(detectCores() - 1)  # Leave one core for the OS
+registerDoParallel(cluster)</code></pre>
+<p>Configure the trainControl object for 10-fold cross-validation.</p>
+<pre class="r"><code>fitControl &lt;- trainControl(method = &quot;cv&quot;, number = 10, allowParallel = TRUE)</code></pre>
+<p>Develop the training model using random forests.</p>
+<pre class="r"><code>x &lt;- train_good[, -53]
+y &lt;- train_good[, 53]
+fit &lt;- train(x, y, method = &quot;rf&quot;, data = train_good, trControl = fitControl)</code></pre>
+<pre><code>## Loading required package: randomForest</code></pre>
+<pre><code>## randomForest 4.6-12</code></pre>
+<pre><code>## Type rfNews() to see new features/changes/bug fixes.</code></pre>
+<p>De-register the parallel processing cluster</p>
+<pre class="r"><code>stopCluster(cluster)</code></pre>
+<p>We check accuracy (&gt;99%) and confusion matrix of model.</p>
+<pre class="r"><code>fit</code></pre>
+<pre><code>## Random Forest 
+## 
+## 19622 samples
+##    52 predictor
+##     5 classes: 'A', 'B', 'C', 'D', 'E' 
+## 
+## No pre-processing
+## Resampling: Cross-Validated (10 fold) 
+## Summary of sample sizes: 17660, 17660, 17661, 17660, 17660, 17658, ... 
+## Resampling results across tuning parameters:
+## 
+##   mtry  Accuracy   Kappa      Accuracy SD  Kappa SD   
+##    2    0.9952600  0.9940041  0.001847735  0.002337744
+##   27    0.9949545  0.9936177  0.002045376  0.002587510
+##   52    0.9902147  0.9876213  0.003132428  0.003963141
+## 
+## Accuracy was used to select the optimal model using  the largest value.
+## The final value used for the model was mtry = 2.</code></pre>
+<pre class="r"><code>fit$resample</code></pre>
+<pre><code>##     Accuracy     Kappa Resample
+## 1  0.9959225 0.9948428   Fold02
+## 2  0.9979613 0.9974213   Fold01
+## 3  0.9933707 0.9916125   Fold03
+## 4  0.9969450 0.9961362   Fold06
+## 5  0.9943935 0.9929080   Fold05
+## 6  0.9959225 0.9948423   Fold04
+## 7  0.9959225 0.9948420   Fold07
+## 8  0.9938869 0.9922678   Fold10
+## 9  0.9964340 0.9954896   Fold09
+## 10 0.9918409 0.9896784   Fold08</code></pre>
+<pre class="r"><code>confusionMatrix.train(fit)</code></pre>
+<pre><code>## Cross-Validated (10 fold) Confusion Matrix 
+## 
+## (entries are percentages of table totals)
+##  
+##           Reference
+## Prediction    A    B    C    D    E
+##          A 28.4  0.1  0.0  0.0  0.0
+##          B  0.0 19.3  0.1  0.0  0.0
+##          C  0.0  0.0 17.3  0.2  0.0
+##          D  0.0  0.0  0.0 16.1  0.0
+##          E  0.0  0.0  0.0  0.0 18.3</code></pre>
+<p>Now we use the model to predict on test data.</p>
+<pre class="r"><code>x &lt;- test_good[, -53]
+prediction &lt;- predict(fit, x)
+prediction</code></pre>
+<pre><code>##  [1] B A B A A E D B A A B C B A E E A B B B
+## Levels: A B C D E</code></pre>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
 </div>
 
 
