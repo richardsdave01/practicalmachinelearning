@@ -50,11 +50,7 @@ sum(complete.cases(train_good))
 
 We read and pre-process the testing data the same way.
 ```{r read_test}
-<<<<<<< HEAD
 testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE,na.strings=c("NA", "", "#DIV/0!"))
-=======
-testing = read.csv("~/R/MachineLearning/pml_project/data/pml-testing.csv", stringsAsFactors = FALSE, na.strings=c("NA", "", "#DIV/0!"))
->>>>>>> f6574a41d4dde8af2215a9ae2ec62c5215db18f0
 test_good <- testing[,keep_train]
 test_good <- test_good[,-(1:7)]
 dim(test_good)
@@ -97,15 +93,9 @@ fitControl <- trainControl(method = "cv", number = 10, allowParallel = TRUE)
 
 Develop the training model using random forests.
 ```{r model, cache=TRUE}
-<<<<<<< HEAD
 x <- trainData[,-53]
 y <- trainData[,53]
 fit <- train(x, y, method="rf", data=trainData, trControl=fitControl)
-=======
-x <- train_good[,-53]
-y <- train_good[,53]
-fit <- train(x, y, method="rf", data=train_good, trControl=fitControl)  # This can take a long time to run.
->>>>>>> f6574a41d4dde8af2215a9ae2ec62c5215db18f0
 ```
 
 De-register the parallel processing cluster
@@ -138,8 +128,4 @@ prediction
 ```
 
 ## Conclusion
-<<<<<<< HEAD
-=======
-
 The model predicted all 20 of the observations in the testing dataset correctly.
->>>>>>> f6574a41d4dde8af2215a9ae2ec62c5215db18f0
