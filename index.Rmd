@@ -112,7 +112,7 @@ confusionMatrix.train(fit)
 Calculate out-of-sample error for the model.
 ```{r oos_error}
 validate <- predict(fit, valData)
-valAccuracy <- sum(valData.classe == validate) / length(validate)
+valAccuracy <- sum(valData$classe == validate) / length(validate)
 valAccuracy
 
 outOfSampleError <- 1 - valAccuracy
@@ -129,3 +129,5 @@ prediction
 
 ## Conclusion
 The model predicted all 20 of the observations in the testing dataset correctly.
+
+Out of sample error is `r outOfSampleError * 100`%.
